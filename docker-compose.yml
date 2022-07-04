@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  aiogram:
+    build: .
+    command: ['python3', 'src/run.py']
+    env_file: .env
