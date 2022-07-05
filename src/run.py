@@ -2,9 +2,9 @@ import logging
 
 from aiogram import executor
 
-from bot import dp
+from bot import dispatcher
 
 logging.basicConfig(level=logging.INFO)
 
 if __name__ == '__main__':
-    executor.start_polling(dp)
+    executor.start_polling(dispatcher, skip_updates=True)
