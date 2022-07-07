@@ -5,3 +5,19 @@ services:
     build: .
     command: ['python3', 'src/run.py']
     env_file: .env
+    depends_on:
+      - redis
+
+  redis:
+    container_name: redis
+    hostname: redis
+    image: redis
+    restart: always
+    command: ['redis-server', '--save', '20', '1']
+    expose:
+      - '6379'
+    volumes:
+      - redis:/data
+
+volumes:
+  redis:

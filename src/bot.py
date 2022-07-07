@@ -1,7 +1,7 @@
 import os
 
 from aiogram import Bot, Dispatcher
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.contrib.fsm_storage.redis import RedisStorage2 as BustedRedisStorage
 from aiogram.dispatcher.filters.builtin import CommandStart
 
 from src.handlers import (
@@ -17,7 +17,7 @@ from src.handlers import (
 from src.states import Dialog
 
 bot = Bot(os.environ.get('BOT_TOKEN'))
-storage = MemoryStorage()
+storage = BustedRedisStorage(host='redis')
 dispatcher = Dispatcher(bot, storage=storage)
 
 
