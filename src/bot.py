@@ -12,7 +12,16 @@ from src.handlers import (
     pill_time,
     pill_another_time,
     pill_saved,
-    cancel
+    cancel,
+    pill_info_callback,
+    delete_pill_approve,
+    new_pill_title,
+    rename_pill,
+    time_to_delete,
+    delete_time,
+    time_to_add,
+    add_time,
+    pause_pill
 )
 from src.states import Dialog
 
@@ -37,3 +46,9 @@ dispatcher.register_message_handler(
     lambda message: message.text == 'Сохранить',
     state=Dialog.new_pill_save
 )
+dispatcher.register_message_handler(
+    delete_pill_approve,
+    lambda message: message.text == 'Удалить',
+    state=Dialog.approve_delete
+)
+dispatcher.register_callback_query_handler(pill_info_callback, state='*')
