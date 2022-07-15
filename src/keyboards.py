@@ -25,7 +25,7 @@ async def get_all_pills_keyboards(pills: AsyncIterable) -> InlineKeyboardMarkup:
     # TODO: set button limit
     async for pill in pills:
         keyboard.add(
-            InlineKeyboardButton(pill['title'], callback_data=str(pill["_id"])),
+            InlineKeyboardButton(pill['title'], callback_data=str(pill['_id'])),
         )
     return keyboard
 

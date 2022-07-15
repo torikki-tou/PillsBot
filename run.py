@@ -2,7 +2,7 @@ import logging
 
 from aiogram import executor
 
-from bot import dispatcher
+from src.bot import dispatcher
 
 logging.basicConfig(level=logging.INFO)
 
