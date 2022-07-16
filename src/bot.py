@@ -2,9 +2,10 @@ import os
 
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.redis import RedisStorage2 as BustedRedisStorage
-from aiogram.dispatcher.filters.builtin import CommandStart
+from aiogram.dispatcher.filters.builtin import CommandStart, Text
 
-from src.states import Dialog
+from src.states import NewPill, Info, RenamePill, AddTime, DeleteTime, DeletePill
+from src.keyboard import Button
 from src import handlers
 
 bot = Bot(os.environ.get('BOT_TOKEN'))
@@ -15,46 +16,26 @@ dispatcher = Dispatcher(bot, storage=storage)
 dispatcher.register_message_handler(
     handlers.pills.core.start, CommandStart())
 dispatcher.register_message_handler(
-    handlers.pills.core.back_home, lambda message: message.text == 'На главную', state='*')
+    handlers.pills.core.back_home, Text(Button.cancel.value), state='*')
 
 dispatcher.register_message_handler(
-    handlers.pills.add.start, lambda message: message.text == 'Новая таблетка', state=None)
+    handlers.pills.add.start, Text(Button.new_pill.value), state=None)
 dispatcher.register_message_handler(
-    handlers.pills.add.title, state=Dialog.new_pill_title)
+    handlers.pills.add.title, state=NewPill.title)
 dispatcher.register_message_handler(
-    handlers.pills.add.time, state=Dialog.new_pill_time)
+    handlers.pills.add.time, state=NewPill.time)
 dispatcher.register_message_handler(
-    handlers.pills.add.another_time, lambda message: message.text == 'Добавить время', state=Dialog.new_pill_save)
+    handlers.pills.add.another_time, Text(Button.another_time.value), state=NewPill.ask_save)
 dispatcher.register_message_handler(
-    handlers.pills.add.save, lambda message: message.text == 'Сохранить', state=Dialog.new_pill_save)
+    handlers.pills.add.save, Text(Button.save_pill.value), state=NewPill.ask_save)
 
 dispatcher.register_message_handler(
-    handlers.pills.info.all_, lambda message: message.text == 'Все таблетки', state=None)
+    handlers.pills.info.all_, Text(Button.all_pills.value), state=None)
 dispatcher.register_callback_query_handler(
-    handlers.pills.info.by_id, state='*')
+    handlers.pills.info.by_id, state=None)
 
 dispatcher.register_message_handler(
-    handlers.pills.rename.input_, lambda message: message.text == 'Удалить', state=Dialog.approve_delete)
-dispatcher.register_message_handler(
-    handlers.pills.rename.save, lambda message: message.text == 'Удалить', state=Dialog.approve_delete)
-
-# dispatcher.register_message_handler(
-#     handlers.pills.time.add.input_, lambda message: message.text == 'Удалить', state=Dialog.approve_delete)
-# dispatcher.register_message_handler(
-#     handlers.pills.time.add.save, lambda message: message.text == 'Удалить', state=Dialog.approve_delete)
-#
-# dispatcher.register_message_handler(
-#     handlers.pills.time.delete.choose, lambda message: message.text == 'Удалить', state=Dialog.approve_delete)
-# dispatcher.register_message_handler(
-#     handlers.pills.time.delete.perform, lambda message: message.text == 'Удалить', state=Dialog.approve_delete)
-#
-# dispatcher.register_message_handler(
-#     handlers.pills.pause.perform, lambda message: message.text == 'Удалить', state=Dialog.approve_delete)
-#
-# dispatcher.register_message_handler(
-#     handlers.pills.delete.ask_for_approve, lambda message: message.text == 'Удалить', state=Dialog.approve_delete)
-# dispatcher.register_message_handler(
-#     handlers.pills.delete.perform, lambda message: message.text == 'Удалить', state=)
+    handlers.pills.info.all_, Text(Button.all_pills.value), state=None)
 
 dispatcher.register_message_handler(
     handlers.pills.core.unknown_message,  state='*')
