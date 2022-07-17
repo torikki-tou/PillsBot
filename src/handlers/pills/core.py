@@ -15,11 +15,11 @@ async def start(message: Message):
 async def back_home(message: Message, state: FSMContext):
     if await state.get_state() is None:
         return await message.answer('Ты уже на главной странице.', reply_markup=Keyboard().homescreen())
-    await state.finish()
     await message.answer(
         'Действие отменено. Ты снова на главной странице.',
         reply_markup=Keyboard().homescreen()
     )
+    await state.finish()
 
 
 async def unknown_message(message: Message):

@@ -1,3 +1,3 @@
 from src.handlers.pills import (
-    add, core, delete, info, pause, rename, time
+    add, core, delete, info, notifications, rename, time
 )

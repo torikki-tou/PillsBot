@@ -38,5 +38,28 @@ dispatcher.register_message_handler(
     handlers.pills.info.all_, Text(Button.all_pills.value), state=None)
 
 dispatcher.register_message_handler(
+    handlers.pills.rename.input_, Text(Button.rename_pill.value), state=Info.update)
+dispatcher.register_message_handler(
+    handlers.pills.rename.save, state=RenamePill.title)
+
+dispatcher.register_message_handler(
+    handlers.pills.time.add.input_, Text(Button.add_time.value), state=Info.update)
+dispatcher.register_message_handler(
+    handlers.pills.time.add.save, state=AddTime.time)
+
+dispatcher.register_message_handler(
+    handlers.pills.time.delete.choose, Text(Button.delete_time.value), state=Info.update)
+dispatcher.register_message_handler(
+    handlers.pills.time.delete.perform, state=DeleteTime.time)
+
+dispatcher.register_message_handler(
+    handlers.pills.notifications.switch, Text([Button.pill_on.value, Button.pill_off.value]), state=Info.update)
+
+dispatcher.register_message_handler(
+    handlers.pills.delete.ask_for_approve, Text(Button.delete_pill.value), state=Info.update)
+dispatcher.register_message_handler(
+    handlers.pills.delete.perform, Text(Button.delete_pill.value), state=DeletePill.approve)
+
+dispatcher.register_message_handler(
     handlers.pills.core.unknown_message,  state='*')
 

@@ -13,7 +13,8 @@ class Button(str, Enum):
     rename_pill = 'Переименовать'
     add_time = 'Добавить время'
     delete_time = 'Удалить время'
-    pause = 'Приостановить'
+    pill_off = 'Выключить'
+    pill_on = 'Включить'
 
 
 class Keyboard(ReplyKeyboardMarkup):
@@ -28,6 +29,3 @@ class Keyboard(ReplyKeyboardMarkup):
     def add_cancel(self):
         self.row(Button.cancel)
         return self
-
-
-print(Keyboard().add_cancel())
