@@ -10,7 +10,7 @@ from src.database import delete_pill_time
 
 async def choose(message: Message, state: FSMContext):
     await message.answer(
-        'Выбери, какое время удалить',
+        'Выбери, какое время хочешь удалить.',
         reply_markup=Keyboard([(await state.get_data())['times_to_take']], row_width=5).add_cancel()
     )
     await DeleteTime.first()
@@ -26,5 +26,5 @@ async def perform(message: Message, state: FSMContext):
         return await message.answer('Такого времени нету.')
 
     await delete_pill_time((await state.get_data())['_id'], message.text)
-    await message.answer('Время удалено', reply_markup=Keyboard().homescreen())
+    await message.answer('Время удалено.', reply_markup=Keyboard().homescreen())
     await state.finish()

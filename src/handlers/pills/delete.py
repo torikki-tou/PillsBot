@@ -16,5 +16,5 @@ async def ask_for_approve(message: Message):
 
 async def perform(message: Message, state: FSMContext):
     await delete_pill((await state.get_data())['_id'])
-    await message.answer('Препарат удален', reply_markup=Keyboard().homescreen())
+    await message.answer('Препарат удален.', reply_markup=Keyboard().homescreen())
     await state.finish()

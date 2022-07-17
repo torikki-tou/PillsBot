@@ -20,5 +20,5 @@ async def save(message: Message, state: FSMContext):
         return await message.answer('Неправильный формат, перепроверь пожалуйста.')
 
     await add_time_to_pill((await state.get_data())['_id'], time_str)
-    await message.answer('Новое время сохранено', reply_markup=Keyboard().homescreen())
+    await message.answer('Новое время сохранено.', reply_markup=Keyboard().homescreen())
     await state.finish()

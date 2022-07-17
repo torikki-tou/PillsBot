@@ -19,7 +19,7 @@ async def start(message: Message):
 
 async def title(message: Message, state: FSMContext):
     await state.set_data({'title': message.text, 'time': []})
-    text = f'Отлично, я запомнил препарат {message.text}. Теперь введи время в формате, например 08:30'
+    text = f'Отлично, я запомнил препарат {message.text}. Теперь введи время в формате, например 08:30.'
     await message.answer(text, reply_markup=Keyboard().add_cancel())
     await NewPill.next()
 
@@ -42,7 +42,7 @@ async def time(message: Message, state: FSMContext):
 
 async def another_time(message: Message, state: FSMContext):
     state_data = await state.get_data()
-    text = f'Жду новое время! Уже есть: {await get_string_from_time(state_data["time"])}'
+    text = f'Жду новое время! Уже есть: {await get_string_from_time(state_data["time"])}.'
     await message.answer(text, reply_markup=Keyboard().add_cancel())
     await NewPill.previous()
 
@@ -51,6 +51,6 @@ async def save(message: Message, state: FSMContext):
     state_data = await state.get_data()
     await insert_new_pill(message.from_user.id, state_data['title'], state_data['time'])
     time_str = await get_string_from_time(state_data['time'])
-    text = f'Препарат {state_data["title"]} сохранен. Я буду напоминать тебе принять его в {time_str}'
+    text = f'Препарат {state_data["title"]} сохранен. Я буду напоминать тебе принять его в {time_str}.'
     await message.answer(text, reply_markup=Keyboard().homescreen())
     await state.finish()

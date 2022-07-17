@@ -29,12 +29,13 @@ async def by_id(callback: CallbackQuery, state: FSMContext):
     pill['_id'] = str(pill['_id'])
     await state.set_data(pill)
 
-    text = f'{pill["title"]}\n\n' \
-           f'Время приема: {await get_string_from_time(pill["times_to_take"])}\n\n' \
-           f'{"Приостановлено" if pill["paused"] else "Активно"}'
+    text = f'*{pill["title"]}\n\n*' \
+           f'Принимать в {await get_string_from_time(pill["times_to_take"])}\n\n' \
+           f'Уведомления: {"выключены" if pill["paused"] else "включены"}'
 
     await callback.bot.send_message(
         callback.from_user.id, text,
+        parse_mode='MarkdownV2',
         reply_markup=Keyboard([
             [Button.rename_pill],
             [Button.add_time, Button.delete_time],
