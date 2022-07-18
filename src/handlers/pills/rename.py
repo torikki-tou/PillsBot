@@ -1,9 +1,9 @@
-from aiogram.dispatcher import FSMContext
 from aiogram.types import Message
+from aiogram.dispatcher import FSMContext
 
+from src.database import update_pill_title
 from src.keyboard import Keyboard
 from src.states import RenamePill
-from src.database import update_pill_title
 
 
 async def input_(message: Message):

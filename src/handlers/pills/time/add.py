@@ -1,11 +1,11 @@
 from datetime import datetime
 
-from aiogram.dispatcher import FSMContext
 from aiogram.types import Message
+from aiogram.dispatcher import FSMContext
 
-from src.states import AddTime
-from src.keyboard import Keyboard
 from src.database import add_time_to_pill
+from src.keyboard import Keyboard
+from src.states import AddTime
 
 
 async def input_(message: Message):
@@ -15,10 +15,10 @@ async def input_(message: Message):
 
 async def save(message: Message, state: FSMContext):
     try:
-        time_str = datetime.strptime(message.text, '%H:%M').time().strftime('%H:%M')
+        taking_time = datetime.strptime(message.text, '%H:%M').time().strftime('%H:%M')
     except ValueError:
         return await message.answer('Неправильный формат, перепроверь пожалуйста.')
 
-    await add_time_to_pill((await state.get_data())['_id'], time_str)
+    await add_time_to_pill((await state.get_data())['_id'], taking_time)
     await message.answer('Новое время сохранено.', reply_markup=Keyboard().homescreen())
     await state.finish()

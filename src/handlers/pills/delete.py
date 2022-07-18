@@ -1,8 +1,8 @@
-from aiogram.dispatcher import FSMContext
 from aiogram.types import Message
+from aiogram.dispatcher import FSMContext
 
-from src.keyboard import Keyboard, Button
 from src.database import delete_pill
+from src.keyboard import Keyboard, Button
 from src.states import DeletePill
 
 

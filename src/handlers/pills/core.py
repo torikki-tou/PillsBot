@@ -1,5 +1,5 @@
-from aiogram.dispatcher import FSMContext
 from aiogram.types import Message
+from aiogram.dispatcher import FSMContext
 
 from src.database import insert_new_user
 from src.keyboard import Keyboard

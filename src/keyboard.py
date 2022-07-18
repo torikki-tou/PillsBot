@@ -1,5 +1,6 @@
-from aiogram.types import ReplyKeyboardMarkup
 from enum import Enum
+
+from aiogram.types import ReplyKeyboardMarkup
 
 
 class Button(str, Enum):

@@ -1,5 +1,5 @@
-from aiogram.dispatcher import FSMContext
 from aiogram.types import Message
+from aiogram.dispatcher import FSMContext
 
 from src.database import set_notification_status
 from src.keyboard import Keyboard

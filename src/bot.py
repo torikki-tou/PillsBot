@@ -1,15 +1,16 @@
 import os
 
 from aiogram import Bot, Dispatcher
-from aiogram.contrib.fsm_storage.redis import RedisStorage2 as BustedRedisStorage
+from aiogram.contrib.fsm_storage.redis import RedisStorage2
 from aiogram.dispatcher.filters.builtin import CommandStart, Text
 
-from src.states import NewPill, Info, RenamePill, AddTime, DeleteTime, DeletePill
-from src.keyboard import Button
 from src import handlers
+from src.keyboard import Button
+from src.states import NewPill, Info, RenamePill, AddTime, DeleteTime, DeletePill
+
 
 bot = Bot(os.environ.get('BOT_TOKEN'))
-storage = BustedRedisStorage(host='redis')
+storage = RedisStorage2(host='redis')
 dispatcher = Dispatcher(bot, storage=storage)
 
 
