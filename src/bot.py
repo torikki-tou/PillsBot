@@ -32,7 +32,7 @@ dispatcher.register_message_handler(
 dispatcher.register_message_handler(
     handlers.pills.info.all_, Text(Button.all_pills.value), state=None)
 dispatcher.register_callback_query_handler(
-    handlers.pills.info.by_id, lambda callback: callback.data.startwith('pill'), state=None)
+    handlers.pills.info.by_id, lambda callback: callback.data.startswith('pill'), state=None)
 
 dispatcher.register_message_handler(
     handlers.pills.info.all_, Text(Button.all_pills.value), state=None)
@@ -61,7 +61,7 @@ dispatcher.register_message_handler(
     handlers.pills.delete.perform, Text(Button.delete_pill.value), state=DeletePill.approve)
 
 dispatcher.register_callback_query_handler(
-    handlers.notifications.taken, lambda callback: callback.data.startwith('notification'), state='*')
+    handlers.notifications.taken, lambda callback: callback.data.startswith('notification'), state='*')
 
 dispatcher.register_message_handler(
     handlers.pills.core.unknown_message,  state='*')

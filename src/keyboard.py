@@ -1,4 +1,4 @@
-from enum import Enum, StrEnum
+from enum import Enum
 
 from aiogram.types import ReplyKeyboardMarkup
 

@@ -17,20 +17,21 @@ async def all_(message: Message):
            'Нажми на препарат, чтобы увидеть или изменить информацию о нем.'
     keyboard = InlineKeyboardMarkup(1)
     for pill in pills:
-        keyboard.add(InlineKeyboardButton(pill['title'], callback_data=str(pill['_id'])))
+        keyboard.add(InlineKeyboardButton(pill['title'], callback_data=f'pill:{str(pill["_id"])}'))
     await message.answer(text, reply_markup=keyboard)
 
 
 async def by_id(callback: CallbackQuery, state: FSMContext):
-    pill_id = callback.data
+    pill_id = callback.data.split(':')[1]
     pill = await get_pill_by_id(pill_id)
     if not pill:
         return await callback.answer('Я не знаю эту таблетку')
     pill['_id'] = str(pill['_id'])
     await state.set_data(pill)
 
+    taking_times = [time['time'] for time in pill['taking_times']]
     text = f'*{pill["title"]}\n\n*' \
-           f'Принимать в {await get_string_from_time(pill["taking_times"])}\n\n' \
+           f'Принимать в {get_string_from_time(taking_times)}\n\n' \
            f'Уведомления: {"выключены" if pill["paused"] else "включены"}'
 
     await callback.bot.send_message(

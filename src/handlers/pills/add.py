@@ -3,13 +3,19 @@ from datetime import datetime
 from aiogram.types import Message
 from aiogram.dispatcher import FSMContext
 
-from src.database import insert_new_pill
+from src.database import insert_new_pill, allowed_to_add_more_pills
 from src.utils import get_string_from_time
 from src.keyboard import Keyboard, Button
 from src.states import NewPill
 
 
 async def start(message: Message):
+
+    if not await allowed_to_add_more_pills(message.from_user.id):
+        return await message.answer(
+            'Слишком много препаратов, сначала удали что-нибудь',
+        )
+
     await message.answer(
         'Я готов добавить новый препарат, теперь введи название.',
         reply_markup=Keyboard().add_cancel()
@@ -42,15 +48,15 @@ async def time(message: Message, state: FSMContext):
 
 async def another_time(message: Message, state: FSMContext):
     state_data = await state.get_data()
-    text = f'Жду новое время! Уже есть: {await get_string_from_time(state_data["taking_times"])}.'
+    text = f'Жду новое время! Уже есть: {get_string_from_time(state_data["taking_times"])}.'
     await message.answer(text, reply_markup=Keyboard().add_cancel())
     await NewPill.previous()
 
 
 async def save(message: Message, state: FSMContext):
     state_data = await state.get_data()
-    await insert_new_pill(message.from_user.id, state_data['title'], state_data['time'])
-    taking_times = await get_string_from_time(state_data['taking_times'])
+    await insert_new_pill(message.from_user.id, state_data['title'], state_data['taking_times'])
+    taking_times = get_string_from_time(state_data['taking_times'])
     text = f'Препарат {state_data["title"]} сохранен. Я буду напоминать тебе принять его в {taking_times}.'
     await message.answer(text, reply_markup=Keyboard().homescreen())
     await state.finish()

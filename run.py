@@ -1,18 +1,22 @@
 import os
 import asyncio
+from datetime import time, timezone, timedelta
 import logging
 
 from aiogram.utils.executor import start_polling, start_webhook
 import aioschedule
 
 from src.bot import dispatcher
-from src.tasks import send_notifications
+from src.tasks import send_notifications, reset
 
 logging.basicConfig(level=logging.INFO)
 
+TZ = timezone(timedelta(hours=int(os.environ.get('TZ'))))
 
-async def notifications_check():
+
+async def background_tasks():
     aioschedule.every().second.do(send_notifications)
+    aioschedule.every().day.at(time(hour=0, tzinfo=TZ).strftime('%H:%M')).do(reset)
     while True:
         await aioschedule.run_pending()
         await asyncio.sleep(1)
@@ -30,7 +34,7 @@ async def on_shutdown(dp):
 
 
 async def start_background_tasks(_):
-    asyncio.create_task(notifications_check())
+    asyncio.create_task(background_tasks())
 
 
 if __name__ == '__main__':
