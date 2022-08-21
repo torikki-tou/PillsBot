@@ -1,1 +1,1 @@
-import src.handlers.pills
+from src.handlers import pills, notifications

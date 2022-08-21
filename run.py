@@ -7,7 +7,7 @@ from aiogram.utils.executor import start_polling, start_webhook
 import aioschedule
 
 from src.bot import dispatcher
-from src.tasks import send_notifications, reset
+from src.tasks import notify, reset
 
 logging.basicConfig(level=logging.INFO)
 
@@ -15,7 +15,7 @@ TZ = timezone(timedelta(hours=int(os.environ.get('TZ'))))
 
 
 async def background_tasks():
-    aioschedule.every().second.do(send_notifications)
+    aioschedule.every(5).minutes.do(notify)
     aioschedule.every().day.at(time(hour=0, tzinfo=TZ).strftime('%H:%M')).do(reset)
     while True:
         await aioschedule.run_pending()
@@ -23,18 +23,16 @@ async def background_tasks():
 
 
 async def on_startup(dp):
-    await start_background_tasks(None)
-    await dp.bot.set_webhook(os.environ.get('WEBHOOK_URL'))
+    asyncio.create_task(background_tasks())
+    if not int(os.environ.get('DEBUG')):
+        await dp.bot.set_webhook(os.environ.get('WEBHOOK_URL'))
 
 
 async def on_shutdown(dp):
-    await dp.bot.delete_webhook()
+    if not int(os.environ.get('DEBUG')):
+        await dp.bot.delete_webhook()
     await dp.storage.close()
     await dp.storage.wait_closed()
-
-
-async def start_background_tasks(_):
-    asyncio.create_task(background_tasks())
 
 
 if __name__ == '__main__':
@@ -43,7 +41,7 @@ if __name__ == '__main__':
             dispatcher=dispatcher,
             skip_updates=True,
             reset_webhook=True,
-            on_startup=start_background_tasks
+            on_startup=on_startup
         )
     else:
         start_webhook(

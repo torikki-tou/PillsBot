@@ -2,7 +2,7 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.dispatcher import FSMContext
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from src.database import get_pills_of_user, get_pill_by_id
+from src.database import get_pills_of_user, get_pill_by_id, get_times_of_pill
 from src.utils import get_string_from_time
 from src.keyboard import Keyboard, Button
 from src.states import Info
@@ -22,14 +22,13 @@ async def all_(message: Message):
 
 
 async def by_id(callback: CallbackQuery, state: FSMContext):
-    pill_id = callback.data.split(':')[1]
-    pill = await get_pill_by_id(pill_id)
+    pill = await get_pill_by_id(callback.data.split(':')[1])
     if not pill:
         return await callback.answer('Я не знаю эту таблетку')
-    pill['_id'] = str(pill['_id'])
-    await state.set_data(pill)
 
-    taking_times = [time['time'] for time in pill['taking_times']]
+    await state.set_data({**pill, '_id': str(pill['_id'])})
+
+    taking_times = [time['time'] for time in await get_times_of_pill(pill['_id'])]
     text = f'*{pill["title"]}\n\n*' \
            f'Принимать в {get_string_from_time(taking_times)}\n\n' \
            f'Уведомления: {"выключены" if pill["paused"] else "включены"}'
