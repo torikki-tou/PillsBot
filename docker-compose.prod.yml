@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  aiogram:
+    build: .
+    command: ['python3', 'run.py']
+    expose:
+      - '8000'
+    environment:
+      BOT_TOKEN: '${BOT_TOKEN}'
+      MONGO_CONNECTION_STRING: '${MONGO_CONNECTION_STRING}'
+      DEBUG: '${DEBUG}'
+      WEBHOOK_URL: '${WEBHOOK_URL}'
+      TZ: '${TZ}'
+    depends_on:
+      - mongo
+      - redis
+
+  redis:
+    hostname: redis
+    image: redis
+    restart: always
+    command: ['redis-server', '--save', '20', '1']
+    expose:
+      - '6379'
+    volumes:
+      - redis:/data
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: '${MONGO_USERNAME}'
+      MONGO_INITDB_ROOT_PASSWORD: '${MONGO_PASSWORD}'
+    volumes:
+      - mongo:/data/db
+
+volumes:
+  redis:
+  mongo:
+
+networks:
+  nginx_default:
+    external: true
