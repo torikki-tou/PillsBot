@@ -12,6 +12,8 @@ services:
       DEBUG: '${DEBUG}'
       WEBHOOK_URL: '${WEBHOOK_URL}'
       TZ: '${TZ}'
+    networks:
+      - nginx_default
     depends_on:
       - mongo
       - redis
