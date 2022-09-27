@@ -14,7 +14,7 @@ services:
       TZ: '${TZ}'
     networks:
       - nginx_default
-      - pillsbot_default
+      - internal
     depends_on:
       - mongo
       - redis
@@ -26,6 +26,8 @@ services:
     command: ['redis-server', '--save', '20', '1']
     expose:
       - '6379'
+    networks:
+      - internal
     volumes:
       - redis:/data
 
@@ -35,6 +37,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: '${MONGO_USERNAME}'
       MONGO_INITDB_ROOT_PASSWORD: '${MONGO_PASSWORD}'
+    networks:
+      - internal
     volumes:
       - mongo:/data/db
 
@@ -43,5 +47,7 @@ volumes:
   mongo:
 
 networks:
+  internal:
+    driver: bridge
   nginx_default:
     external: true
